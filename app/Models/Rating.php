@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Ratings extends Model
+class Rating extends Model
 {
     use HasFactory;
 
@@ -19,6 +19,6 @@ class Ratings extends Model
     // Relazione molti a uno con Tappe
     public function stage()
     {
-        return $this->belongsTo(Stages::class, 'id_tappa');
+        return $this->belongsTo(Stage::class, 'id_tappa');
     }
 }

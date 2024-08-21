@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Trips extends Model
+class Trip extends Model
 {
     use HasFactory;
 
@@ -22,6 +22,6 @@ class Trips extends Model
     // Relazione uno a molti con Tappe
     public function stages()
     {
-        return $this->hasMany(Stages::class, 'id_viaggio');
+        return $this->hasMany(Stage::class, 'id_viaggio');
     }
 }
