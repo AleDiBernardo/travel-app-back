@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('tappe', function (Blueprint $table) {
+        Schema::create('stages', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('viaggio_id')->unsigned()->index();
-            $table->foreign('viaggio_id')->references('id')->on('viaggi');
+            $table->foreign('viaggio_id')->references('id')->on('trips');
             $table->string('immagine')->nullable();
             $table->date('data');
             $table->string('titolo');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tappe');
+        Schema::dropIfExists('stages');
     }
 };

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('note', function (Blueprint $table) {
+        Schema::create('ratings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('tappa_id')->unsigned()->index();
-            $table->foreign('tappa_id')->references('id')->on('tappe');
-            $table->text('nota');
+            $table->foreign('tappa_id')->references('id')->on('stages');
+            $table->tinyInteger('voto');
         });
 
         Schema::enableForeignKeyConstraints();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('note');
+        Schema::dropIfExists('ratings');
     }
 };
