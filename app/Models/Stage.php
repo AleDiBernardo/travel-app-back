@@ -12,7 +12,7 @@ class Stage extends Model
     protected $table = 'stages';
 
     protected $fillable = [
-        'id_viaggio',
+        'viaggio_id',
         'immagine',
         'data',
         'titolo',
@@ -30,12 +30,12 @@ class Stage extends Model
     // Relazione uno a molti con Note
     public function notes()
     {
-        return $this->hasMany(Note::class, 'id_tappa');
+        return $this->hasMany(Note::class, 'tappa_id');
     }
 
     // Relazione uno a molti con Valutazioni
     public function ratings()
     {
-        return $this->hasMany(Rating::class, 'id_tappa');
+        return $this->hasMany(Rating::class, 'tappa_id');
     }
 }

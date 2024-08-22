@@ -12,13 +12,13 @@ class Note extends Model
     protected $table = 'notes';
 
     protected $fillable = [
-        'id_tappa',
+        'tappa_id',
         'nota',
     ];
 
     // Relazione molti a uno con Tappe
     public function stage()
     {
-        return $this->belongsTo(Stage::class, 'id_tappa');
+        return $this->belongsTo(Stage::class, 'tappa_id');
     }
 }

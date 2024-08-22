@@ -12,13 +12,13 @@ class Rating extends Model
     protected $table = 'ratings';
 
     protected $fillable = [
-        'id_tappa',
+        'tappa_id',
         'voto',
     ];
 
     // Relazione molti a uno con Tappe
     public function stage()
     {
-        return $this->belongsTo(Stage::class, 'id_tappa');
+        return $this->belongsTo(Stage::class, 'tappa_id');
     }
 }
