@@ -24,7 +24,7 @@ class Stage extends Model
     // Relazione molti a uno con Viaggi
     public function trip()
     {
-        return $this->belongsTo(Trip::class, 'id_viaggio');
+        return $this->belongsTo(Trip::class, 'viaggio_id');
     }
 
     // Relazione uno a molti con Note

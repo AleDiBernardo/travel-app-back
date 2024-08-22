@@ -22,6 +22,6 @@ class Trip extends Model
     // Relazione uno a molti con Tappe
     public function stages()
     {
-        return $this->hasMany(Stage::class, 'id_viaggio');
+        return $this->hasMany(Stage::class, 'viaggio_id');
     }
 }

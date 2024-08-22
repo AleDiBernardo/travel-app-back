@@ -13,7 +13,7 @@ class TripController extends Controller
      */
     public function index()
     {
-        $trips = Trip::all();
+        $trips = Trip::with('stages')->get();
         $data = [
             'success' => true,
             'results' => $trips,
