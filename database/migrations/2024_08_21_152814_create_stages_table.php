@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('stages', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('viaggio_id')->unsigned()->index();
+            $table->bigInteger('viaggio_id')->unsigned()->cascadeOnDelete();
             $table->foreign('viaggio_id')->references('id')->on('trips');
             $table->string('immagine')->nullable();
             $table->date('data');
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('descrizione')->nullable();
             $table->decimal('longitudine');
             $table->decimal('latitudine');
+            $table->timestamps();
         });
 
         Schema::enableForeignKeyConstraints();

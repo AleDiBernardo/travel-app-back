@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Stage;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 class StageController extends Controller
 {
     /**
@@ -20,7 +22,39 @@ class StageController extends Controller
      */
     public function create()
     {
-        //
+
+    }
+
+    private function getCoordinates($cityName)
+    {
+        // dd($cityName);
+        $apiKey = env('TOMTOM_API_KEY');
+        // dd($apiKey);
+        $url = "https://api.tomtom.com/search/2/geocode/" . urlencode($cityName) . ".json?key=" . $apiKey;
+        // dd($url);
+
+        $response = Http::withOptions([
+            'verify' => false, 
+        ])
+        ->get($url);
+
+        // dd($response);
+        if ($response->successful()) {
+            $data = $response->json();
+            // dd($data);
+            if (!empty($data['results'])) {
+                $location = $data['results'][0]['position'];
+                // dd($location);
+                return [
+                    'latitudine' => $location['lat'],
+                    'longitudine' => $location['lon'],
+                ];
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -28,9 +62,45 @@ class StageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // try {
+            $validatedData = $request->validate([
+                'viaggio_id' => 'required|exists:trips,id',
+                'data' => 'required|date',
+                'titolo' => 'required|string|max:255',
+                'luogo' => 'required|string|max:255',
+                'descrizione' => 'nullable|string',
+                // 'immagine' => 'nullable|file|image|max:2048',
+            ]);
+            // dd($validatedData);
+    
+            
+            $coordinates = $this->getCoordinates($request->input('luogo'));
+            // dd($coordinates);
+            
+            $newStage = new Stage();
+            // $newStage->fill($validatedData);
+            $newStage->viaggio_id = intval($validatedData['viaggio_id']);
+            $newStage->titolo = $validatedData['titolo'];
+            $newStage->data = $validatedData['data'];
+            $newStage->descrizione = $validatedData['descrizione'] ?? null;
+            $newStage->longitudine = $coordinates['longitudine'] ?? null;
+            $newStage->latitudine = $coordinates['latitudine'] ?? null;            
+            if ($request->hasFile('immagine')) {
+                $path = $request->file('immagine')->store('images', 'public');
+                $newStage->immagine = $path;
+                // dd($request);
+                // dd($validatedData['immagine']);
+            }
+            $newStage->save();
+            return response()->json(['success' => 'Stage creato con successo!'], 201);
+            // dd($newStage);
+    
+        // } catch (\Exception $e) {
+            // Logga l'errore
+        //     Log::error('Errore durante la creazione di una tappa: ' . $e->getMessage());
+        //     return response()->json(['error' => 'Si è verificato un errore durante la creazione della tappa.'], 500);
+        // }
     }
-
     /**
      * Display the specified resource.
      */

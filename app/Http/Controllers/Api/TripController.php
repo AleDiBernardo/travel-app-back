@@ -47,7 +47,7 @@ class TripController extends Controller
         $newTrip->fill($validatedData);
         $newTrip->save();
 
-        return redirect()->route('trips.index')->with('success', 'Viaggio creato con successo!');
+        // return redirect()->route('trips.index')->with('success', 'Viaggio creato con successo!');
     }
 
     /**
