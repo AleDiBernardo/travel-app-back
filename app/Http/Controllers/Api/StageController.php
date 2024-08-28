@@ -7,6 +7,8 @@ use App\Models\Stage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 class StageController extends Controller
 {
     /**
@@ -130,6 +132,11 @@ class StageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $stage = Stage::findOrFail($id);
+        // dd($stage);
+        if ($stage->immagine) {
+            Storage::delete($stage->immagine);
+        }
+        $stage->delete();
     }
 }
