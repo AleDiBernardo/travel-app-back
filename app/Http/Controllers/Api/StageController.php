@@ -122,9 +122,35 @@ class StageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'viaggio_id' => 'required|exists:trips,id',
+            'data' => 'required|date',
+            'titolo' => 'required|string|max:255',
+            'luogo' => 'required|string|max:255',
+            'descrizione' => 'nullable|string',
+            // 'immagine' => 'nullable|file|image|max:2048',
+        ]);
+
+        $coordinates = $this->getCoordinates($request->input('luogo'));
+
+        $stage = Stage::findOrFail($id);
+
+        $stage->viaggio_id = intval($validatedData['viaggio_id']);
+        $stage->titolo = $validatedData['titolo'];
+        $stage->data = $request['data'];
+        $stage->descrizione = $validatedData['descrizione'] ?? null;
+        $stage->longitudine = $coordinates['longitudine'] ?? null;
+        $stage->latitudine = $coordinates['latitudine'] ?? null;            
+        if ($request->hasFile('immagine')) {
+            $path = $request->file('immagine')->store('images', 'public');
+            $stage->immagine = $path;
+            // dd($request);
+            // dd($validatedData['immagine']);
+        }
+        $stage->save();
+        return response()->json(['success' => 'Stage modificato con successo!'], 201);
     }
 
     /**
