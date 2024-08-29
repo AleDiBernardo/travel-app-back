@@ -83,7 +83,7 @@ class StageController extends Controller
             // $newStage->fill($validatedData);
             $newStage->viaggio_id = intval($validatedData['viaggio_id']);
             $newStage->titolo = $validatedData['titolo'];
-            $newStage->data = $validatedData['data'];
+            $newStage->data = $request['data'];
             $newStage->descrizione = $validatedData['descrizione'] ?? null;
             $newStage->longitudine = $coordinates['longitudine'] ?? null;
             $newStage->latitudine = $coordinates['latitudine'] ?? null;            
