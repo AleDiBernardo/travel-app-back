@@ -24,7 +24,6 @@ class StageController extends Controller
      */
     public function create()
     {
-
     }
 
     private function getCoordinates($cityName)
