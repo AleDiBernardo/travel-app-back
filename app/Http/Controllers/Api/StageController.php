@@ -124,35 +124,52 @@ class StageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        Log::info('Dati in arrivo per l\'aggiornamento della tappa:', $request->all());
+        
+        dd($request);
+        // Valida i dati in ingresso
         $validatedData = $request->validate([
             'viaggio_id' => 'required|exists:trips,id',
             'data' => 'required|date',
             'titolo' => 'required|string|max:255',
-            'luogo' => 'required|string|max:255',
             'descrizione' => 'nullable|string',
             // 'immagine' => 'nullable|file|image|max:2048',
         ]);
-
-        $coordinates = $this->getCoordinates($request->input('luogo'));
-
+    
+        // Trova la tappa esistente
         $stage = Stage::findOrFail($id);
-
+    
+        // Aggiorna i campi validati
         $stage->viaggio_id = intval($validatedData['viaggio_id']);
         $stage->titolo = $validatedData['titolo'];
-        $stage->data = $request['data'];
-        $stage->descrizione = $validatedData['descrizione'] ?? null;
-        $stage->longitudine = $coordinates['longitudine'] ?? null;
-        $stage->latitudine = $coordinates['latitudine'] ?? null;            
+        $stage->data = $validatedData['data'];
+        $stage->descrizione = $validatedData['descrizione'] ?? $stage->descrizione; // Mantieni la descrizione esistente se non fornita
+    
+        // Calcola le coordinate solo se necessario
+        if ($request->filled('luogo')) {
+            $coordinates = $this->getCoordinates($request->input('luogo'));
+            $stage->longitudine = $coordinates['longitudine'] ?? $stage->longitudine;
+            $stage->latitudine = $coordinates['latitudine'] ?? $stage->latitudine;
+        }
+    
+        // Gestisci l'upload dell'immagine
         if ($request->hasFile('immagine')) {
+            // Cancella l'immagine esistente dal server
+            if ($stage->immagine) {
+                Storage::delete('public/' . $stage->immagine);
+            }
+            // Salva la nuova immagine
             $path = $request->file('immagine')->store('images', 'public');
             $stage->immagine = $path;
-            // dd($request);
-            // dd($validatedData['immagine']);
         }
+    
+        // Salva le modifiche
         $stage->save();
-        return response()->json(['success' => 'Stage modificato con successo!'], 201);
+    
+        // Restituisci una risposta di successo
+        return response()->json(['success' => 'Stage modificato con successo!'], 200);
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
