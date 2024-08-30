@@ -30,8 +30,8 @@ Route::get('/about', function () {
     return view('about', $data);
 })->name('about');
 
-// Rotta per visualizzare il form
 Route::get('/stages/create', [StageController::class, 'create'])->name('stages.create');
-
-// Rotta per gestire l'invio del form
 Route::post('/stages', [StageController::class, 'store'])->name('stages.store');
+
+Route::get('/stages/{id}/edit', [StageController::class, 'edit'])->name('stages.edit');
+Route::put('/stages/{id}', [StageController::class, 'update'])->name('stages.update');

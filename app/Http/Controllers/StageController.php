@@ -25,8 +25,7 @@ class StageController extends Controller
         // dd($request);
         $viaggio_id = $request->query('viaggio_id');
         $data = $request->query('data');
-        return view('stage.create', compact('data','viaggio_id'));
-
+        return view('stage.create', compact('data', 'viaggio_id'));
     }
 
     private function getCoordinates($cityName)
@@ -38,9 +37,9 @@ class StageController extends Controller
         // dd($url);
 
         $response = Http::withOptions([
-            'verify' => false, 
+            'verify' => false,
         ])
-        ->get($url);
+            ->get($url);
 
         // dd($response);
         if ($response->successful()) {
@@ -88,7 +87,7 @@ class StageController extends Controller
             $newStage->immagine = $path;
         }
         $newStage->save();
-        return redirect('http://localhost:3000',302);
+        return redirect('http://localhost:3000', 302);
     }
 
     /**
@@ -99,12 +98,48 @@ class StageController extends Controller
         //
     }
 
+    private function getLocationFromCoordinates($latitudine, $longitudine)
+    {
+        // Recupera la chiave API dal file .env
+        $apiKey = env('TOMTOM_API_KEY');
+        
+        // Costruisci l'URL per la richiesta di reverse geocoding
+        $url = "https://api.tomtom.com/search/2/reverseGeocode/{$latitudine},{$longitudine}.json?key={$apiKey}";
+        // dd($url);
+        // Effettua la richiesta HTTP utilizzando la facciata Http di Laravel
+        $response = Http::withOptions([
+            'verify' => false,
+        ])->get($url);
+
+        // Verifica se la risposta è stata un successo
+        if ($response->successful()) {
+            $data = $response->json();
+
+            if (!empty($data['addresses'])) {
+
+                $addressInfo = $data['addresses'][0]['address'];
+
+                $city = $addressInfo['municipality'] ?? null;
+    
+                return $city;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $stage = Stage::findOrFail($id);
+
+        $location = $this->getLocationFromCoordinates($stage->latitudine, $stage->longitudine);
+        // dd($location);
+        return view('stage.edit', compact('location', 'stage'));
     }
 
     /**
@@ -112,9 +147,32 @@ class StageController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        $stage = Stage::findOrFail($id);
 
+        $validatedData = $request->validate([
+            'titolo' => 'required|string|max:255',
+            'luogo' => 'required|string|max:255',
+            'descrizione' => 'nullable|string',
+            // 'immagine' => 'nullable|file|image|max:2048',
+        ]);
+
+        $coordinates = $this->getCoordinates($request->input('luogo'));
+
+        $stage->titolo = $validatedData['titolo'];
+        $stage->data = $request->input('data');
+        $stage->descrizione = $validatedData['descrizione'] ?? null;
+        $stage->longitudine = $coordinates['longitudine'] ?? $stage->longitudine;
+        $stage->latitudine = $coordinates['latitudine'] ?? $stage->latitudine;
+
+        if ($request->hasFile('immagine')) {
+            $path = $request->file('immagine')->store('images', 'public');
+            $stage->immagine = $path;
+        }
+
+        $stage->save();
+
+        return redirect('http://localhost:3000', 302);
+    }
     /**
      * Remove the specified resource from storage.
      */
