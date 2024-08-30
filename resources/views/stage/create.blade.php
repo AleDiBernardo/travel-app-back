@@ -1,13 +1,6 @@
-{{-- resources/views/add_stage.blade.php --}}
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aggiungi Nuova Tappa</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <div class="ms_bg p-5">
         @if(session('errorMessage'))
             <div class="alert alert-danger">
@@ -17,9 +10,13 @@
 
         <form action="{{ route('stages.store') }}" method="POST" enctype="multipart/form-data" class="bg-white py-3 px-5 rounded">
             @csrf
+            @method('POST')
             <h1 class="text-center">Aggiungi Nuova Tappa</h1>
 
             <!-- Input per il file dell'immagine -->
+            <input type="hidden" id="data" name="data" value="{{ $data }}">
+            <input type="hidden" id="viaggio_id" name="viaggio_id" value="{{ $viaggio_id }}">
+
             <div class="mb-3">
                 <label for="image" class="form-label">Carica Immagine</label>
                 <input
@@ -69,8 +66,7 @@
             </div>
 
             <!-- Pulsante di invio -->
-            <button type="submit" class="btn">Salva Tappa</button>
+            <button type="submit" style="background: #ffb871" class="btn text-white">Salva Tappa</button>
         </form>
     </div>
-</body>
-</html>
+@endsection
