@@ -79,6 +79,8 @@ class TripController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $trip = Trip::findOrFail($id);
+        // dd($trip);
+        $trip->delete();
     }
 }

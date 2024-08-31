@@ -15,8 +15,8 @@ return new class extends Migration
 
         Schema::create('stages', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('viaggio_id')->unsigned()->cascadeOnDelete();
-            $table->foreign('viaggio_id')->references('id')->on('trips');
+            $table->unsignedBigInteger('viaggio_id');
+            $table->foreign('viaggio_id')->references('id')->on('trips')->cascadeOnDelete();
             $table->string('immagine')->nullable();
             $table->date('data');
             $table->string('titolo');
