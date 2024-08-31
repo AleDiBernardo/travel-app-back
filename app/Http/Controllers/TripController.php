@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class TripController extends Controller
@@ -43,7 +44,9 @@ class TripController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $trip = Trip::findOrFail($id);
+        // dd($trip);
+        return view('trip.edit', compact('trip'));
     }
 
     /**
@@ -51,9 +54,27 @@ class TripController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'titolo' => 'required|string|max:255',
+            'destinazione' => 'required|string|max:255',
+            'data_inizio' => 'required|date',
+            'data_fine' => 'required|date|after_or_equal:data_inizio',
+            'descrizione' => 'nullable|string',
+        ]);
+    
+        $trip = Trip::findOrFail($id);
+    
+        $trip->titolo = $validatedData['titolo'];
+        $trip->destinazione = $validatedData['destinazione'];
+        $trip->data_inizio = $validatedData['data_inizio'];
+        $trip->data_fine = $validatedData['data_fine'];
+        $trip->descrizione = $validatedData['descrizione'];
+    
+        $trip->save();
+    
+        return redirect('http://localhost:3000', 302);
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */

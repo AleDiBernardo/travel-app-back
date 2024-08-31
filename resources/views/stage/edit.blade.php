@@ -13,7 +13,6 @@
             @method('PUT')
             <h1 class="text-center">Modifica Tappa</h1>
 
-            <!-- Input per il file dell'immagine -->
             <input type="hidden" id="data" name="data" value="{{ $stage->data }}">
             <input type="hidden" id="viaggio_id" name="viaggio_id" value="{{ $stage->viaggio_id }}">
 
@@ -25,7 +24,6 @@
                     class="form-control"
                     name="immagine"
                 />
-                <!-- Mostra l'immagine attuale se esiste -->
                 @if($stage->immagine)
                     <div class="mt-2">
                         <img src="{{ asset('storage/' . $stage->immagine) }}" alt="Immagine Attuale" class="img-thumbnail" style="max-width: 200px;">
@@ -33,7 +31,6 @@
                 @endif
             </div>
 
-            <!-- Input di testo per il titolo -->
             <div class="mb-3">
                 <label for="title" class="form-label">Titolo</label>
                 <input
@@ -46,7 +43,6 @@
                 />
             </div>
 
-            <!-- Input di testo per il luogo -->
             <div class="mb-3">
                 <label for="location" class="form-label">Luogo</label>
                 <input
@@ -59,7 +55,6 @@
                 />
             </div>
 
-            <!-- Textarea per la descrizione -->
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>
                 <textarea
@@ -71,7 +66,6 @@
                 >{{ old('descrizione', $stage->descrizione) }}</textarea>
             </div>
 
-            <!-- Pulsante di invio -->
             <button type="submit" style="background: #ffb871" class="btn text-white">Aggiorna Tappa</button>
         </form>
     </div>
