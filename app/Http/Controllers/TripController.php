@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class TripController extends Controller
@@ -13,13 +11,7 @@ class TripController extends Controller
      */
     public function index()
     {
-        $trips = Trip::with('stages')->get();
-        $data = [
-            'success' => true,
-            'results' => $trips,
-        ];
-
-        return response()->json($data);
+        //
     }
 
     /**
@@ -27,7 +19,7 @@ class TripController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -35,19 +27,7 @@ class TripController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'titolo' => 'required|string|max:255',
-            'destinazione' => 'required|string|max:255',
-            'data_inizio' => 'required|date',
-            'data_fine' => 'required|date|after_or_equal:data_inizio',
-            'descrizione' => 'nullable|string',
-        ]);
-
-        $newTrip = new Trip();
-        $newTrip->fill($validatedData);
-        $newTrip->save();
-
-        // return redirect()->route('trips.index')->with('success', 'Viaggio creato con successo!');
+        //
     }
 
     /**
@@ -63,7 +43,7 @@ class TripController extends Controller
      */
     public function edit(string $id)
     {
-        
+        //
     }
 
     /**
@@ -71,7 +51,7 @@ class TripController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+        //
     }
 
     /**
