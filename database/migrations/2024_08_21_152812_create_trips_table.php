@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('data_inizio');
             $table->date('data_fine');
             $table->text('descrizione')->nullable();
+            $table->timestamps();
+
         });
     }
 
