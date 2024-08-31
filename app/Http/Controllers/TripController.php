@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Trip;
 use Illuminate\Http\Request;
 
 class TripController extends Controller
@@ -19,7 +20,7 @@ class TripController extends Controller
      */
     public function create()
     {
-        //
+        return view('trip.create');
     }
 
     /**
@@ -27,7 +28,25 @@ class TripController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $validatedData = $request->validate([
+            'data_inizio' => 'required|date',
+            'data_fine' => 'required|date',
+            'titolo' => 'required|string|max:255',
+            'destinazione' => 'required|string|max:255',
+            'descrizione' => 'nullable|string',
+        ]);
+
+        $newTrip = new Trip();
+        $newTrip->titolo = $validatedData['titolo'];
+        $newTrip->descrizione = $validatedData['descrizione'] ?? null;
+        $newTrip->destinazione = $validatedData['destinazione'];
+        $newTrip->data_inizio = $validatedData['data_inizio'];
+        $newTrip->data_fine = $validatedData['data_fine'];
+
+        $newTrip->save();
+        return redirect('http://localhost:3000', 302);
+
     }
 
     /**
