@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\StageController;
+use App\Http\Controllers\TripController;
 use App\Models\Stage;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +36,6 @@ Route::post('/stages', [StageController::class, 'store'])->name('stages.store');
 
 Route::get('/stages/{id}/edit', [StageController::class, 'edit'])->name('stages.edit');
 Route::put('/stages/{id}', [StageController::class, 'update'])->name('stages.update');
+
+Route::get('/trips/{id}/edit', [TripController::class, 'edit'])->name('trips.edit');
+Route::put('/trips/{id}', [TripController::class, 'update'])->name('trips.update');
