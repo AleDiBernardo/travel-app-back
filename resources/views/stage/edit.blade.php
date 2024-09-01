@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="ms_bg p-5">
+    <div class="ms_bg p-5 container">
         @if(session('errorMessage'))
             <div class="alert alert-danger">
                 {{ session('errorMessage') }}
@@ -66,7 +66,13 @@
                 >{{ old('descrizione', $stage->descrizione) }}</textarea>
             </div>
 
-            <button type="submit" style="background: #ffb871" class="btn text-white">Aggiorna Tappa</button>
+            <div class="d-flex w-100 justify-content-between">
+
+                <a href="http://localhost:3000" type="submit" style="background: #ffb871" class="btn text-white">Indietro</a>
+                <button type="submit" style="background: #ffb871" class="btn text-white">Salva</button>
+            </div>
+
+
         </form>
     </div>
 @endsection
